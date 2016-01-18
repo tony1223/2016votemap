@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>台灣 2016 信心希望聯盟 政黨票投票地圖</title>
+        <title>台灣 2016 綠社盟政黨票投票地圖</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <meta property="og:type" content="website">
@@ -182,7 +182,7 @@ function initialize() {
         pvote.then(function(Votes){
 
             var VoteMap = Votes.filter(function(v){
-                return v.姓名 == "信心希望聯盟" && v.票數 != 0;
+                return v.姓名 == "綠黨社會民主黨聯盟" && v.票數 != 0;
             }).reduce(function(now,v){
                 now[v.鄉鎮+"-"+v.村里] = now[v.鄉鎮+"-"+v.村里] || [];
 
