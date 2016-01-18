@@ -14,7 +14,7 @@ var cunli_data = null;
 $.getJSON('https://cdn.rawgit.com/tony1223/2016votemap/gh-pages/cunli.json', function (data) {
     cunli_data = data;
     if(map != null){
-        map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
+        cunli = map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
     }
 });
 
@@ -33,7 +33,7 @@ function initialize() {
     });
 
     if(cunli_data != null){
-        map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
+        cunli = map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
     }
     
 
