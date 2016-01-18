@@ -9,9 +9,13 @@ var Votes = null;
 $.getJSON('https://cdn.rawgit.com/tony1223/crawl2016votes/master/outputs/votes_all.json', function (data) {
     Votes = data;
 });
+var cunli_data = null;
 
 $.getJSON('https://cdn.rawgit.com/tony1223/2016votemap/gh-pages/cunli.json', function (data) {
-    cunli = map.data.addGeoJson(topojson.feature(data, data.objects.cunli));
+    cunli_data = data;
+    if(map != null){
+        map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
+    }
 });
 
 // $.getJSON("../outputs/votes_all.json",function(data){
@@ -27,6 +31,11 @@ function initialize() {
         zoom: 10,
         center: {lat: 23.00, lng: 120.30}
     });
+
+    if(cunli_data != null){
+        map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
+    }
+    
 
     var areas = [];
     cunli.forEach(function (value) {
