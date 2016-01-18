@@ -14,8 +14,8 @@
                 padding: 0;
             }
             #map-canvas {
-                height: 100%;
-                width: 100%;
+                height: 600px;
+                width: 90%;
             }
             #histogram {
                 height: 40%;
@@ -44,6 +44,7 @@
         <div class="container">
             <div class="row">
                 <p class="hidden-sm hidden-xs">&nbsp;</p>
+                <h1>綠黨社會民主黨 政黨票分布地圖</h1>
                 <div id="map-canvas" class="col-md-12"></div>
                 <div id="detail" class="col-md-12">
                     <div class="col-md-8 col-sm-12 col-xs-12">
@@ -170,7 +171,6 @@ var ColorBar = function(num){
 function initialize() {
 
     /*map setting*/
-    $('#map-canvas').height(window.outerHeight / 2.2);
 
     map = new google.maps.Map(document.getElementById('map-canvas'), {
         zoom: 10,

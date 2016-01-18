@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>台灣 2016 民主進步黨政黨票投票地圖</title>
+        <title>台灣 2016 民主進步黨 政黨票投票地圖</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <meta property="og:type" content="website">
@@ -14,8 +14,8 @@
                 padding: 0;
             }
             #map-canvas {
-                height: 100%;
-                width: 100%;
+                height: 600px;
+                width: 90%;
             }
             #histogram {
                 height: 40%;
@@ -44,6 +44,7 @@
         <div class="container">
             <div class="row">
                 <p class="hidden-sm hidden-xs">&nbsp;</p>
+                <h1>民進黨 政黨票分布地圖</h1>
                 <div id="map-canvas" class="col-md-12"></div>
                 <div id="detail" class="col-md-12">
                     <div class="col-md-8 col-sm-12 col-xs-12">
@@ -128,7 +129,6 @@ var pcunli = $.get('../cunli2.json');
 
 
 
-
 var _colorBar = [
     {n:50,color:"#FFFFCC"},
     {n:100,color:"#ECDAB0"},
@@ -171,7 +171,6 @@ var ColorBar = function(num){
 function initialize() {
 
     /*map setting*/
-    $('#map-canvas').height(window.outerHeight / 2.2);
 
     map = new google.maps.Map(document.getElementById('map-canvas'), {
         zoom: 10,
@@ -181,11 +180,12 @@ function initialize() {
     pcunli.then(function(data){
 
         pvote.then(function(Votes){
-            debugger;
+
             var VoteMap = Votes.filter(function(v){
                 return v.姓名 == "民主進步黨" && v.票數 != 0;
             }).reduce(function(now,v){
                 now[v.鄉鎮+"-"+v.村里] = now[v.鄉鎮+"-"+v.村里] || [];
+
                 now[v.鄉鎮+"-"+v.村里].push(v);
                 return now;
             },{});
@@ -279,3 +279,5 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </script>
     </body>
 </html>
+
+
