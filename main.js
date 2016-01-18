@@ -1,22 +1,17 @@
-$.ajaxSetup({async: false});
 
 var map,
         currentPlayIndex = false,
         cunli;
 
-var Votes = null;
+var Votes = [];
 
-$.getJSON('https://cdn.rawgit.com/tony1223/crawl2016votes/master/outputs/votes_all.json', function (data) {
+$.get('https://cdn.rawgit.com/tony1223/crawl2016votes/master/outputs/votes_all.json', function (data) {
     Votes = data;
 });
 var cunli_data = null;
 
-$.getJSON('https://cdn.rawgit.com/tony1223/2016votemap/gh-pages/cunli.json', function (data) {
-    cunli_data = data;
-    if(map != null){
-        cunli = map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
-    }
-});
+var pcunli = $.get('cunli2.json');
+
 
 // $.getJSON("../outputs/votes_all.json",function(data){
 //     Votes = data;
@@ -32,57 +27,58 @@ function initialize() {
         center: {lat: 23.00, lng: 120.30}
     });
 
-    if(cunli_data != null){
+
+    pcunli.then(function(data){
+        cunli_data = data;
         cunli = map.data.addGeoJson(topojson.feature(cunli_data, cunli_data.objects.cunli));
-    }
-    
 
-    var areas = [];
-    cunli.forEach(function (value) {
-        var AreaName = value.getProperty('T_Name'),
-                TownName = value.getProperty('V_Name'),
-                count = 0;
+        var areas = [];
+        cunli.forEach(function (value) {
+            var AreaName = value.getProperty('T_Name'),
+                    TownName = value.getProperty('V_Name'),
+                    count = 0;
 
-        var localVotes = Votes.filter(function(v){
-            return v.areaname == AreaName && v.villagename == TownName;
+            var localVotes = Votes.filter(function(v){
+                return v.areaname == AreaName && v.villagename == TownName;
+            });
+            var count = 0;
+            if (localVotes.length) {
+                count = localVotes.reduce(function (now,next) {
+                    
+                    next["v"]["區域立委"].filter(function(n){
+                        return n.pt == "中國國民黨";
+                    }).forEach(function(n){
+                        now += parseInt(n.c.replace(","),10);
+                    });
+
+                    return now;
+                },0);
+            }
+            value.setProperty('num', count);
+            
+            // if(countyId.length === 2) {
+            //     countyId += '000';
+            // }
+            // if(!areas[countyId]) {
+            //     areas[countyId] = value.getProperty('C_Name');
+            // }
+            // if(!areas[townId]) {
+            //     areas[townId] = value.getProperty('C_Name') + value.getProperty('T_Name');
+            // }
         });
-        var count = 0;
-        if (localVotes.length) {
-            count = localVotes.reduce(function (now,next) {
-                
-                next["v"]["區域立委"].filter(function(n){
-                    return n.pt == "中國國民黨";
-                }).forEach(function(n){
-                    now += parseInt(n.c.replace(","),10);
-                });
-
-                return now;
-            },0);
-        }
-        value.setProperty('num', count);
         
-        // if(countyId.length === 2) {
-        //     countyId += '000';
-        // }
-        // if(!areas[countyId]) {
-        //     areas[countyId] = value.getProperty('C_Name');
-        // }
-        // if(!areas[townId]) {
-        //     areas[townId] = value.getProperty('C_Name') + value.getProperty('T_Name');
-        // }
-    });
+        map.data.setStyle(function (feature) {
+            color = ColorBar(feature.getProperty('num'));
+            return {
+                fillColor: color,
+                fillOpacity: 0.6,
+                strokeColor: 'gray',
+                strokeWeight: 1
+            }
+        });
 
+    });
     
-    map.data.setStyle(function (feature) {
-        color = ColorBar(feature.getProperty('num'));
-        return {
-            fillColor: color,
-            fillOpacity: 0.6,
-            strokeColor: 'gray',
-            strokeWeight: 1
-        }
-    });
-
     map.data.addListener('mouseover', function (event) {
         var Cunli = event.feature.getProperty('C_Name') + event.feature.getProperty('T_Name') + event.feature.getProperty('V_Name');
         map.data.revertStyle();
@@ -108,64 +104,6 @@ function initialize() {
             });
         }
     }); 
-
-    $('#playButton1').on('click', function () {
-        var maxIndex = DengueTW['total'].length;
-        if (false === currentPlayIndex) {
-            currentPlayIndex = 0;
-        } else {
-            currentPlayIndex += 1;
-            $(this).addClass('active disabled').find('.glyphicon').show();
-        }
-
-        if (currentPlayIndex < maxIndex) {
-            showDateMap(new Date(DengueTW['total'][currentPlayIndex][0]), cunli);
-            setTimeout(function () {
-                $('#playButton1').trigger('click');
-            }, 300);
-        } else {
-            $(this).removeClass('active disabled').find('.glyphicon').hide();
-            currentPlayIndex = false;
-            $('#title').html('');
-        }
-        return false;
-    });
-
-    $('#playButton2').on('click', function () {
-        var maxIndex = DengueTW['total'].length;
-        if (false === currentPlayIndex) {
-            currentPlayIndex = 0;
-        } else {
-            currentPlayIndex += 1;
-            $(this).addClass('active disabled').find('.glyphicon').show();
-        }
-
-        if (currentPlayIndex < maxIndex) {
-            showDayMap(new Date(DengueTW['total'][currentPlayIndex][0]), cunli);
-            setTimeout(function () {
-                $('#playButton2').trigger('click');
-            }, 300);
-        } else {
-            $(this).removeClass('active disabled').find('.glyphicon').hide();
-            currentPlayIndex = false;
-            $('#title').html('');
-        }
-        return false;
-    });
-}
-
-$(window).resize(function () {
-    var len = $('#myTabContent > .tab-pane').length;
-    for (var i = 0; i < len; i++) {
-        $('#myTabContent > .tab-pane').eq(i).highcharts().setSize($('#myTabContent').width(), $('#myTabContent').height());
-    }
-});
-
-function closeTab(node) {
-    var nodename = node.name;
-    node.parentNode.remove();
-    $('#' + nodename).remove();
-    $('#myTab a:first').tab('show');
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
