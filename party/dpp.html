@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>台灣 2016 民進黨政黨票投票地圖</title>
+        <title>台灣 2016 民主進步黨政黨票投票地圖</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <meta property="og:type" content="website">
@@ -115,7 +115,7 @@ var map,
         cunli;
 
 
-var pvote = $.get('http://www.tonyqstatic.org/2016/api-votes.php?type=%E6%94%BF%E9%BB%A8%E7%A5%A8&name=民主進步黨&ignore0=1');
+var pvote = $.get('https://cdn.rawgit.com/tony1223/crawl2016votes/9168275d4d2acfde6084b2f3b9027ddccbf7be68/outputs/votes_type_%E6%94%BF%E9%BB%A8%E7%A5%A8.json');
 var cunli_data = null;
 
 var pcunli = $.get('../cunli2.json');
@@ -124,6 +124,7 @@ var pcunli = $.get('../cunli2.json');
 // $.getJSON("../outputs/votes_all.json",function(data){
 //     Votes = data;
 // });
+
 
 
 
@@ -180,10 +181,11 @@ function initialize() {
     pcunli.then(function(data){
 
         pvote.then(function(Votes){
-
-            var VoteMap = Votes.reduce(function(now,v){
+            debugger;
+            var VoteMap = Votes.filter(function(v){
+                return v.姓名 == "民主進步黨" && v.票數 != 0;
+            }).reduce(function(now,v){
                 now[v.鄉鎮+"-"+v.村里] = now[v.鄉鎮+"-"+v.村里] || [];
-
                 now[v.鄉鎮+"-"+v.村里].push(v);
                 return now;
             },{});

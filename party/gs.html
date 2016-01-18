@@ -115,7 +115,7 @@ var map,
         cunli;
 
 
-var pvote = $.get('http://www.tonyqstatic.org/2016/api-votes.php?type=%E6%94%BF%E9%BB%A8%E7%A5%A8&name=%E7%B6%A0%E9%BB%A8%E7%A4%BE%E6%9C%83%E6%B0%91%E4%B8%BB%E9%BB%A8%E8%81%AF%E7%9B%9F&ignore0=1');
+var pvote = $.get('https://cdn.rawgit.com/tony1223/crawl2016votes/9168275d4d2acfde6084b2f3b9027ddccbf7be68/outputs/votes_type_%E6%94%BF%E9%BB%A8%E7%A5%A8.json');
 var cunli_data = null;
 
 var pcunli = $.get('../cunli2.json');
@@ -181,7 +181,9 @@ function initialize() {
 
         pvote.then(function(Votes){
 
-            var VoteMap = Votes.reduce(function(now,v){
+            var VoteMap = Votes.filter(function(v){
+                return v.姓名 == "綠黨社會民主黨聯盟" && v.票數 != 0;
+            }).reduce(function(now,v){
                 now[v.鄉鎮+"-"+v.村里] = now[v.鄉鎮+"-"+v.村里] || [];
 
                 now[v.鄉鎮+"-"+v.村里].push(v);
