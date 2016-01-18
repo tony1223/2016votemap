@@ -6,7 +6,7 @@ var map,
 
 var Votes = null;
 
-$.getJSON('https://raw.githubusercontent.com/tony1223/crawl2016votes/master/outputs/votes_all.json', function (data) {
+$.getJSON('https://cdn.rawgit.com/tony1223/crawl2016votes/master/outputs/votes_all.json', function (data) {
     Votes = data;
 });
 
@@ -24,7 +24,7 @@ function initialize() {
         center: {lat: 23.00, lng: 120.30}
     });
 
-    $.getJSON('cunli.json', function (data) {
+    $.getJSON('https://cdn.rawgit.com/tony1223/2016votemap/gh-pages/cunli.json', function (data) {
         cunli = map.data.addGeoJson(topojson.feature(data, data.objects.cunli));
     });
 
