@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>台灣 2016 信心希望聯盟 政黨票投票地圖</title>
+        <title>台灣 2016 健保免費聯盟 政黨票投票地圖</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <meta property="og:type" content="website">
@@ -44,7 +44,7 @@
         <div class="container">
             <div class="row">
                 <p class="hidden-sm hidden-xs">&nbsp;</p>
-                <h1>信心希望聯盟 政黨票分布地圖</h1>
+                <h1>健保免費連線 政黨票分布地圖</h1>
                 <div id="map-canvas" class="col-md-12"></div>
                 <div id="detail" class="col-md-12">
                     <h2 id="content" class="text-muted">在地圖上滑動或點選以顯示數據</h2>
@@ -130,15 +130,15 @@ var pcunli = $.get('../cunli2.json');
 
 
 var _colorBar = [
-    {n:10,color:"#FFFFCC"},
-    {n:50,color:"#ECDAB0"},
-    {n:90,color:"#DAB594"},
-    {n:180,color:"#C79079"},
-    {n:210,color:"#BE7D6B"},
-    {n:300,color:"#B56B5D"},
-    {n:350,color:"#AC584F"},
-    {n:450,color:"#A24641"},
-    {n:500,color:"#993333"}
+    {n:1,color:"#FFFFCC"},
+    {n:5,color:"#ECDAB0"},
+    {n:9,color:"#DAB594"},
+    {n:18,color:"#C79079"},
+    {n:25,color:"#BE7D6B"},
+    {n:40,color:"#B56B5D"},
+    {n:80,color:"#AC584F"},
+    {n:150,color:"#A24641"},
+    {n:300,color:"#993333"}
 ];
 var out = [];
 var last_c = -1;
@@ -182,7 +182,7 @@ function initialize() {
         pvote.then(function(Votes){
 
             var VoteMap = Votes.filter(function(v){
-                return v.姓名 == "信心希望聯盟" && v.票數 != 0;
+                return v.姓名 == "健保免費連線" && v.票數 != 0;
             }).reduce(function(now,v){
                 now[v.鄉鎮+"-"+v.村里] = now[v.鄉鎮+"-"+v.村里] || [];
 
